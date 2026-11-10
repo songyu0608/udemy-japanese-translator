@@ -3640,7 +3640,7 @@
     },
     {
       "word": "request-signing",
-      "meaning": "요청-서명"
+      "meaning": "リクエスト署名"
     },
     {
       "word": "requester pays"
@@ -3722,11 +3722,11 @@
     },
     {
       "word": "return",
-      "meaning": "반환"
+      "meaning": "返却"
     },
     {
       "word": "returns",
-      "meaning": "반환하다"
+      "meaning": "返す"
     },
     {
       "word": "reverse proxy"
@@ -4043,7 +4043,7 @@
     },
     {
       "word": "shape",
-      "meaning": "형태"
+      "meaning": "形状"
     },
     {
       "word": "shard"
