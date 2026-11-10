@@ -1,6 +1,6 @@
 /*
  * Developer term dictionary.
- * Each row is a term with an optional Korean meaning:
+ * Each row is a term with an optional Japanese meaning:
  * - A term without a meaning is kept in English: it is replaced with a [[n]]
  *   placeholder before translation and restored afterwards.
  * - A term with a meaning is replaced with that meaning instead of the word.
@@ -122,7 +122,7 @@
   /**
    * Replace dictionary terms with [[n]] placeholders.
    * Returns { text, terms, meanings } where terms[n] is the original surface text
-   * and meanings[n] is the Korean meaning (undefined for terms kept in English).
+   * and meanings[n] is the Japanese meaning (undefined for terms kept in English).
    */
   function protect(source) {
     const terms = [];

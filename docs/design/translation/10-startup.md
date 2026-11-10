@@ -32,4 +32,4 @@ Scenario:
 - Result: Inline translations appear after the download; progress is logged in the console
 
 ## Console Helpers
-`window.udemyKoreanQuiz` exposes `start()`, `refresh()`, `layoutInfo()`, and `destroy()`; `window.udemyKoreanCaption` exposes `start()`, `stop()`, and `destroy()`.
+`window.udemyJapaneseQuiz` exposes `start()`, `refresh()`, `layoutInfo()`, and `destroy()`; `window.udemyJapaneseCaption` exposes `start()`, `stop()`, and `destroy()`.

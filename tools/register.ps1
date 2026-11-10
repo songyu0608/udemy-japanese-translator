@@ -2,20 +2,20 @@
 #
 # Chrome lets an extension start a program on this PC only when the program is
 # registered as a native messaging host. This script only registers it:
-# - saves tools/dictionary-host.ps1 and a small launcher to ~\.udemy-dictionary-helper
+# - saves tools/dictionary-host.ps1 and a small launcher to ~\.udemy-ja-dictionary-helper
 # - writes the host manifest and one registry key under HKCU (no admin rights)
 # It installs nothing. GitHub CLI is installed later from the editor, on approval.
 #
 # Run in PowerShell:
-#   irm https://raw.githubusercontent.com/JaceDashS/udemy-korean-translator/main/tools/register.ps1 | iex
+#   irm https://raw.githubusercontent.com/songyu0608/udemy-japanese-translator/main/tools/register.ps1 | iex
 #
 # Kept ASCII-only so it runs the same through `irm | iex` and from a file.
 
 function Register-DictionaryHelper {
-  $repo = "JaceDashS/udemy-korean-translator"
-  $hostName = "com.udemy.dictionary_helper"
-  $extensionId = "mmmljckioegeobbebbmildgebfjfbbdo"
-  $helperDir = Join-Path $HOME ".udemy-dictionary-helper"
+  $repo = "songyu0608/udemy-japanese-translator"
+  $hostName = "com.udemy.ja_dictionary_helper"
+  $extensionId = "gldnmpappkjeenipohflffeinmfgmfai"
+  $helperDir = Join-Path $HOME ".udemy-ja-dictionary-helper"
   $hostFile = Join-Path $helperDir "dictionary-host.ps1"
 
   New-Item -ItemType Directory -Force -Path $helperDir | Out-Null

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dictionary Helper Setup</title>
+  <title>辞書ヘルパーの登録</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -33,7 +33,7 @@
       padding: 32px 16px;
       background: var(--bg);
       color: var(--fg);
-      font: 15px/1.6 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+      font: 15px/1.6 system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, sans-serif;
     }
     main { max-width: 680px; margin: 0 auto; }
     h1 { font-size: 22px; margin: 0 0 4px; }
@@ -89,38 +89,38 @@
 </head>
 <body>
   <main>
-    <h1>사전 도우미 등록 (PC마다 처음 한 번)</h1>
+    <h1>辞書ヘルパーの登録（PC ごとに最初の一度だけ）</h1>
     <p class="muted">
-      Chrome은 보안상 확장 프로그램이 PC에서 프로그램을 실행하지 못하게 막습니다.
-      아래 명령으로 "이 확장은 사전 도우미를 실행해도 된다"고 한 번만 등록하면,
-      그다음부터는 사전 편집기의 버튼으로 모두 진행됩니다.
+      Chrome はセキュリティ上、拡張機能が PC 上のプログラムを実行することを禁止しています。
+      下のコマンドで「この拡張機能は辞書ヘルパーを実行してよい」と一度だけ登録すれば、
+      以降はすべて辞書エディターのボタンで進められます。
     </p>
 
-    <h2>순서</h2>
+    <h2>手順</h2>
     <ol>
-      <li><b>명령 복사</b>를 누릅니다.</li>
-      <li><kbd>Windows</kbd> 키를 누르고 <b>PowerShell</b>을 입력한 뒤 <kbd>Enter</kbd>로 엽니다.</li>
-      <li>PowerShell 창에서 마우스 오른쪽 버튼(또는 <kbd>Ctrl</kbd>+<kbd>V</kbd>)으로 붙여넣고 <kbd>Enter</kbd>를 누릅니다.</li>
-      <li>창에 <b>Done.</b>이 나오면 끝입니다. 이 탭과 사이드 패널이 알아서 다음 단계로 넘어갑니다.</li>
+      <li><b>コマンドをコピー</b> を押します。</li>
+      <li><kbd>Windows</kbd> キーを押し、<b>PowerShell</b> と入力して <kbd>Enter</kbd> で開きます。</li>
+      <li>PowerShell の画面で右クリック（または <kbd>Ctrl</kbd>+<kbd>V</kbd>）で貼り付け、<kbd>Enter</kbd> を押します。</li>
+      <li>画面に <b>Done.</b> と表示されたら完了です。このタブとサイドパネルが自動で次の手順に進みます。</li>
     </ol>
 
     <div class="command">
       <code id="command"></code>
-      <button id="copy" type="button">명령 복사</button>
+      <button id="copy" type="button">コマンドをコピー</button>
     </div>
 
-    <h2>이 명령이 하는 일</h2>
+    <h2>このコマンドが行うこと</h2>
     <ul>
-      <li>도우미 스크립트(<code>dictionary-host.ps1</code>)를 <code>%USERPROFILE%\.udemy-dictionary-helper</code>에 내려받습니다.</li>
-      <li>Chrome이 도우미를 찾을 수 있도록 현재 사용자 레지스트리에 키 하나를 씁니다. 관리자 권한은 필요 없습니다.</li>
-      <li>아무것도 설치하지 않습니다. GitHub CLI 설치와 로그인은 사전 편집기에서 버튼을 눌러 승인할 때만 진행됩니다.</li>
+      <li>ヘルパースクリプト（<code>dictionary-host.ps1</code>）を <code>%USERPROFILE%\.udemy-ja-dictionary-helper</code> にダウンロードします。</li>
+      <li>Chrome がヘルパーを見つけられるよう、現在のユーザーのレジストリにキーを 1 つ書き込みます。管理者権限は不要です。</li>
+      <li>何もインストールしません。GitHub CLI のインストールとログインは、辞書エディターでボタンを押して承認したときだけ行われます。</li>
     </ul>
     <p class="muted">
-      내용을 먼저 확인하려면
-      <a id="source" target="_blank" rel="noopener">register.ps1</a>을 열어 보세요.
+      内容を先に確認するには
+      <a id="source" target="_blank" rel="noopener">register.ps1</a> を開いてください。
     </p>
 
-    <div class="state" id="state" role="status">등록을 기다리는 중...</div>
+    <div class="state" id="state" role="status">登録を待っています...</div>
   </main>
   <script src="setup.js"></script>
 </body>

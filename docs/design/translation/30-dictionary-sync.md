@@ -25,13 +25,13 @@ flowchart LR
 ```
 
 Representative scenario:
-- Input: Remote `terms` = `[{ "word": "private subnet", "meaning": "프라이빗 서브넷" }]`
+- Input: Remote `terms` = `[{ "word": "private subnet", "meaning": "プライベートサブネット" }]`
 - Steps: `loadGlossary()` → `isValidTerms()` true → `configure()` → `protect()` on "a private subnet"
-- Result: Translation contains `프라이빗 서브넷`
+- Result: Translation contains `プライベートサブネット`
 - All scenarios: [Dictionary Sync Scenarios](../../testing/scenarios/translation/30-dictionary-sync.md#dictionary-sync-scenarios)
 
 ## Editor
-- `editor/index.html` is a single static page, opened in the extension's side panel. It reads `dictionary.json` from the branch and shows the rows in a spreadsheet-style table: 단어, 뜻, 대소문자 구분 (checkbox), with a row number column
+- `editor/index.html` is a single static page, opened in the extension's side panel. It reads `dictionary.json` from the branch and shows the rows in a spreadsheet-style table: 単語, 意味, 大文字小文字の区別 (checkbox), with a row number column
 - Each row is one term. Edits change the row in memory; the table is rebuilt only for add, delete, sort, and search, so the cell being typed in keeps its focus
 - Enter moves to the same column in the next row. Pasting tab-separated text (word, meaning, Y) into a cell inserts one row per line after the current row
 - Headers sort the table. The search box filters by word or meaning
@@ -42,7 +42,7 @@ Representative scenario:
 - Outside the extension (for example opened as a file) the editor is read-only: the button stays disabled and the status line says registering is in the side panel
 
 ## Register Chain
-- Input: The edited rows; a click on 등록 / 등록 신청
+- Input: The edited rows; a click on 登録 / 登録申請
 - Output: A commit on `dictionary` (owner) or a pull request (others), shown in the status line
 - Code: `editor/app.js` → `startChain()`, `continueFromStatus()`, `approveInstall()`, `approveLogin()`, `submit()`, `onRegisterClick()`; `background.js` → `connect()`, `ask()`, `stop()`
 - Spec: [Dictionary Sync](../../specs/translation/30-dictionary-sync.md#requirements)
@@ -50,26 +50,26 @@ Representative scenario:
 
 ```mermaid
 flowchart TD
-    S[Click 등록 / 등록 신청] --> A{ping answers?}
+    S[Click 登録 / 登録申請] --> A{ping answers?}
     A -- host not found or too old --> R[Open setup tab, poll ping every 2s] --> B
     A -- yes --> V{version >= bundled?}
-    V -- no --> U[Button: 도우미 업데이트] -->|click| U2[send bundled script, host replaces itself and restarts] --> B
+    V -- no --> U[Button: ヘルパーを更新] -->|click| U2[send bundled script, host replaces itself and restarts] --> B
     V -- yes --> B{status: gh installed?}
-    B -- no --> I[Button: GitHub CLI 설치] -->|click| I2[install via winget] --> B
+    B -- no --> I[Button: GitHub CLI をインストール] -->|click| I2[install via winget] --> B
     B -- yes --> C{logged in?}
-    C -- no --> L[Button: GitHub 로그인] -->|click| L2[PowerShell login window + Chrome tab, poll status every 3s] --> P
+    C -- no --> L[Button: GitHub にログイン] -->|click| L2[PowerShell login window + Chrome tab, poll status every 3s] --> P
     C -- yes --> P[submit]
 ```
 
-- `step` holds what the button shows: `""` (등록 / 등록 신청), `busy`, `register`, `update`, `install`, `login`, `waitLogin`. A click on `update`, `install`, or `login` resumes the chain; on `register` it reopens the guide tab
+- `step` holds what the button shows: `""` (登録 / 登録申請), `busy`, `register`, `update`, `install`, `login`, `waitLogin`. A click on `update`, `install`, or `login` resumes the chain; on `register` it reopens the guide tab
 - Version check (`isCurrentHost()`): the expected version is read from the helper script bundled in the extension (`tools/dictionary-host.ps1`, line `$HostVersion = N`, fetched with `chrome.runtime.getURL`). A `ping` answer without a version counts as 0
 - Update (`approveUpdate()`): sends the bundled script in an `update` request, disconnects, and pings again to confirm the new version before continuing
 - Too old to update (`registerThenContinue(id, true)`): a helper that answers `Unknown request.` to `ping` or `update` predates these requests. The guide tab opens; the editor and the tab stop the running helper before each `ping`, because a running process keeps its old code, and wait until a helper of the bundled version answers
-- `chainId` is incremented by 취소 and 도우미 끄기, so a waiting loop ends instead of continuing an abandoned chain
+- `chainId` is incremented by キャンセル and ヘルパーを停止, so a waiting loop ends instead of continuing an abandoned chain
 - The rows are read at submit time, so edits made while the chain waited are included
-- The button reads 등록 until the helper has reported the push permission once; after that, 등록 (owner) or 등록 신청 (others). The last known login and permission are kept in the page's `localStorage` only for this label. The helper decides between a commit and a pull request at submit time, so the label never changes what happens
-- Scenario: First click on a new PC by a non-owner → button 등록 → chain → status says no push permission → 등록 신청 중... → 등록 신청 완료; the next visit shows 등록 신청
-- Scenario: Clean PC, helper registered, no GitHub CLI → click 등록 신청 → button GitHub CLI 설치 → click → installed → button GitHub 로그인 → click → login window and tab → approved → pull request opened without another click
+- The button reads 登録 until the helper has reported the push permission once; after that, 登録 (owner) or 登録申請 (others). The last known login and permission are kept in the page's `localStorage` only for this label. The helper decides between a commit and a pull request at submit time, so the label never changes what happens
+- Scenario: First click on a new PC by a non-owner → button 登録 → chain → status says no push permission → 登録申請中... → 登録申請完了; the next visit shows 登録申請
+- Scenario: Clean PC, helper registered, no GitHub CLI → click 登録申請 → button GitHub CLI をインストール → click → installed → button GitHub にログイン → click → login window and tab → approved → pull request opened without another click
 - All scenarios: [Dictionary Sync Scenarios](../../testing/scenarios/translation/30-dictionary-sync.md#register-chain-scenarios)
 
 ## Helper
@@ -79,10 +79,10 @@ flowchart TD
 - `submit` checks the file (version 2, valid rows) and then uses only `gh api`:
   - Owner: reads the file's blob sha on `dictionary`, skips when the new content has the same git blob id, otherwise `PUT contents` with that sha
   - Others: `POST forks`, waits for the fork, creates `dictionary-update-<ms>` from the upstream `dictionary` head, commits the file there, and opens the pull request. An unchanged file deletes the new branch and reports no change
-- Registration (`register.ps1`, ASCII only so it runs through `irm | iex`): saves the host and a launcher to `%USERPROFILE%\.udemy-dictionary-helper` and writes the registry key `HKCU\Software\Google\Chrome\NativeMessagingHosts\com.udemy.dictionary_helper`. The launcher runs `powershell.exe -File "%~dp0dictionary-host.ps1"`, so a non-ASCII user folder name never goes into the ASCII batch file. It installs nothing
-- `dictionary-host.ps1` is saved with a UTF-8 BOM. Windows PowerShell 5.1 reads a file without one in the system code page, which breaks its Korean login messages
+- Registration (`register.ps1`, ASCII only so it runs through `irm | iex`): saves the host and a launcher to `%USERPROFILE%\.udemy-ja-dictionary-helper` and writes the registry key `HKCU\Software\Google\Chrome\NativeMessagingHosts\com.udemy.ja_dictionary_helper`. The launcher runs `powershell.exe -File "%~dp0dictionary-host.ps1"`, so a non-ASCII user folder name never goes into the ASCII batch file. It installs nothing
+- `dictionary-host.ps1` is saved with a UTF-8 BOM. Windows PowerShell 5.1 reads a file without one in the system code page, which breaks its Japanese login messages
 - `$HostVersion` must be raised whenever a request or an answer changes; otherwise registered PCs keep a helper that does not match the editor
-- Scenario: Installed v1, extension bundles v2 → `ping` answers 1 → 도우미 업데이트 → `update` → the host writes v2 and exits → next `ping` answers 2 → the chain continues
+- Scenario: Installed v1, extension bundles v2 → `ping` answers 1 → ヘルパーを更新 → `update` → the host writes v2 and exits → next `ping` answers 2 → the chain continues
 - stdout carries the protocol, so the host writes diagnostics to stderr and discards every other output
 - Scenario: User folder `C:\Users\シンジョンス` → `register.ps1` → the launcher holds only `%~dp0` → `ping` and `status` answer through Chrome's launch path
 

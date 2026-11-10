@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dictionary Editor</title>
+  <title>辞書エディター</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -54,7 +54,7 @@
       padding: 12px 16px;
       background: var(--bg);
       color: var(--fg);
-      font: 14px/1.45 system-ui, "Malgun Gothic", sans-serif;
+      font: 14px/1.45 system-ui, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, sans-serif;
     }
     h1 { font-size: 18px; margin: 0 12px 0 0; }
     a { color: var(--accent); }
@@ -170,51 +170,51 @@
 </head>
 <body>
   <header class="row">
-    <h1>Dictionary Editor</h1>
-    <span class="muted">단어 한 행 = 단어 1개. 뜻은 비워둘 수 있습니다(비우면 영어 그대로).</span>
+    <h1>辞書エディター</h1>
+    <span class="muted">1 行 = 1 単語。意味は空欄でもかまいません（空欄なら英語のまま）。</span>
   </header>
 
   <div class="layout">
   <aside class="side">
   <div class="row">
-    <button id="reload" type="button">새로고침</button>
+    <button id="reload" type="button">再読み込み</button>
     <span class="helper" id="helper"></span>
-    <button id="helperStop" class="link" type="button" hidden>도우미 끄기</button>
+    <button id="helperStop" class="link" type="button" hidden>ヘルパーを停止</button>
   </div>
 
   <div class="row">
-    <input id="search" type="search" placeholder="검색 (단어 또는 뜻)" autocomplete="off">
+    <input id="search" type="search" placeholder="検索（単語または意味）" autocomplete="off">
     <span class="muted" id="count"></span>
     <span class="problem" id="problems"></span>
   </div>
 
-  <div class="row add-term" role="group" aria-label="단어 추가">
-    <input id="newWord" type="text" placeholder="단어 (필수, 예: private subnet)" autocomplete="off">
-    <input id="newMeaning" type="text" placeholder="뜻 (선택, 예: 프라이빗 서브넷)" autocomplete="off">
-    <label><input id="newExact" type="checkbox"> 대소문자 구분</label>
-    <button id="addTerm" class="primary" type="button">추가</button>
+  <div class="row add-term" role="group" aria-label="単語を追加">
+    <input id="newWord" type="text" placeholder="単語（必須、例: private subnet）" autocomplete="off">
+    <input id="newMeaning" type="text" placeholder="意味（任意、例: プライベートサブネット）" autocomplete="off">
+    <label><input id="newExact" type="checkbox"> 大文字小文字を区別</label>
+    <button id="addTerm" class="primary" type="button">追加</button>
   </div>
 
   <div class="row">
-    <button id="register" class="primary" type="button" disabled>등록</button>
-    <button id="cancel" type="button" hidden>취소</button>
+    <button id="register" class="primary" type="button" disabled>登録</button>
+    <button id="cancel" type="button" hidden>キャンセル</button>
     <span class="muted" id="changes"></span>
   </div>
   <div class="status" id="status" role="status"></div>
   <p class="muted">
-    엑셀에서 행을 복사해 단어 칸에 붙여넣으면 여러 행이 한 번에 추가됩니다.
-    열 순서는 <b>단어 · 뜻 · 대소문자구분(Y)</b>입니다. Enter는 아래 칸으로 이동합니다.
+    Excel から行をコピーして単語欄に貼り付けると、複数行をまとめて追加できます。
+    列の順序は <b>単語 · 意味 · 大文字小文字の区別(Y)</b> です。Enter で下の欄に移動します。
   </p>
   </aside>
 
   <section class="main">
-  <div class="row pager" aria-label="페이지">
+  <div class="row pager" aria-label="ページ">
     <button id="firstPage" type="button">«</button>
-    <button id="prevPage" type="button">‹ 이전</button>
+    <button id="prevPage" type="button">‹ 前へ</button>
     <span class="muted" id="pageInfo"></span>
-    <button id="nextPage" type="button">다음 ›</button>
+    <button id="nextPage" type="button">次へ ›</button>
     <button id="lastPage" type="button">»</button>
-    <label class="muted">페이지당
+    <label class="muted">1 ページあたり
       <select id="pageSize">
         <option value="50">50</option>
         <option value="100" selected>100</option>
@@ -228,9 +228,9 @@
       <thead>
         <tr>
           <th></th>
-          <th class="sortable" data-key="word">단어 <span class="arrow"></span></th>
-          <th class="sortable" data-key="meaning">뜻 <span class="arrow"></span></th>
-          <th class="sortable" data-key="exact">대소문자 구분 <span class="arrow"></span></th>
+          <th class="sortable" data-key="word">単語 <span class="arrow"></span></th>
+          <th class="sortable" data-key="meaning">意味 <span class="arrow"></span></th>
+          <th class="sortable" data-key="exact">大文字小文字の区別 <span class="arrow"></span></th>
           <th></th>
         </tr>
       </thead>
