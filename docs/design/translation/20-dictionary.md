@@ -2,7 +2,7 @@
 
 ## Placeholder Substitution
 - Input: Source English text
-- Output: Korean translation with terms without a meaning in their original English form, and terms with a meaning replaced by that meaning
+- Output: Japanese translation with terms without a meaning in their original English form, and terms with a meaning replaced by that meaning
 - Code: `dictionary.js` → `protect()`, `restore()`; `translator.js` → `translateWithDictionary()`, `translate()` (used by the quiz and the captions)
 - Data: rows from `dictionary.json` (dictionary branch, see [Dictionary Sync](30-dictionary-sync.md)), or the bundled list in `dictionary-terms.js` → `window.__udemyQuizTranslatorTerms` (`groups`, `caseSensitive`) when that file cannot be used
 - Spec: [Dictionary](../../specs/translation/20-dictionary.md#requirements)
@@ -26,7 +26,7 @@ flowchart LR
 Representative scenario:
 - Input: "Launch an EC2 instance in a private subnet with an IAM role."
 - Steps: `protect()` → "Launch an [[0]] [[1]] in a [[2]] with an [[3]]." → translate → `restore()`
-- Result: "private subnet에서 EC2 instance를 IAM role과 함께 시작합니다."
+- Result: "private subnetでEC2 instanceをIAM roleと一緒に起動します。"
 - All scenarios: [Dictionary Scenarios](../../testing/scenarios/translation/20-dictionary.md#dictionary-scenarios)
 
 ## Placeholder Format
@@ -48,7 +48,7 @@ Representative scenario:
 ## Data Format (version 2)
 `dictionary.json` on the `dictionary` branch:
 ```json
-{ "version": 2, "terms": [ { "word": "Claude", "exact": true }, { "word": "private subnet", "meaning": "프라이빗 서브넷" }, { "word": "Lambda" } ] }
+{ "version": 2, "terms": [ { "word": "Claude", "exact": true }, { "word": "private subnet", "meaning": "プライベートサブネット" }, { "word": "Lambda" } ] }
 ```
 The bundled list in `dictionary-terms.js` was converted to this format once (1,597 entries in the bundled lists became 1,583 rows after merging duplicates). A comparison of 7 sample sentences showed identical output for the bundled list and the converted file.
 
@@ -56,4 +56,4 @@ The bundled list in `dictionary-terms.js` was converted to this format once (1,5
 `dictionary-terms.js` has `caseSensitive` (product names that are ordinary words in lowercase) and `groups` (`claude`, `awsServices`, `awsConcepts`, `ccarF`, `general`). It is the fallback when `dictionary.json` cannot be used. Avoid everyday English words such as "object", "request", "continue", or "summary", which would stay untranslated everywhere. Add inflected forms that are not plurals explicitly ("deterministically").
 
 ## Known Limits
-Korean particles are chosen by the translator for the placeholder, so after restoring they may not match the English word's pronunciation (e.g. "Claude extended thinking를"). For terms with a meaning the meaning replaces the placeholder, so a particle the translator attached to the placeholder (e.g. "은/는") stays after the meaning and may read unnaturally when the meaning ends in a different sound.
+Japanese particles are chosen by the translator around the placeholder, so after restoring the sentence may read slightly unnaturally (e.g. "Claude extended thinkingを"). For terms with a meaning the meaning replaces the placeholder, and the particle the translator attached to the placeholder (e.g. "は/が") stays after the meaning.

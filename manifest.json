@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Korean Translator for Udemy",
-  "short_name": "Korean for Udemy",
-  "version": "2.0.0",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw+qujB+izAniVxGILvKGJiL3VwId1VgLqvLH4UonzKKD1GpCzt8fzBOt+pA0xIKi6+Jn0AWzkuOLUVJodwcmmjSEdZCJZpspx1cnxic6Hdx/DlTfwRhiqJvNuQCiOlSH3yqHZmKoEHFiUNQDkLqF/tPhYhVSC1ik93Ey+K7QYrsfYRanspalFbouHBNxclgH6cVTasVSY0YKCETNBw8SvxACClGclHqvMbWmV1LoAr+WdqaGwmhG3LuftuzoUWcsqvRFBOpYVO9AhOL8e7Uy7t/DcBk397JAiCM8GnlUQkoCRESU3cj+xB1hVTlh4iATQcHsGyLt+AEu7gaZDIM2iQIDAQAB",
-  "description": "Udemy 퀴즈와 영상 자막을 Chrome 내장 Translator API로 PC 안에서 한국어로 번역합니다. 아이콘을 누르면 개발자 용어 사전 편집기가 사이드 패널에 열립니다.",
+  "name": "Japanese Translator for Udemy",
+  "short_name": "Japanese for Udemy",
+  "version": "1.0.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA64xezKf4vUVbZl5i4OM5hk0nVk19pVh/I+oU8U9mgfs4SN+Z+Hg1dHG4hb6LHB+GpL568RaYtPbnUQBcgK2XIu/kNgkb/e/TjszHleaxO4hsOSA2kwOsspGVdInEAOhL69i7EXUHLo6ZSFyJdeG34715/9QONSXqdwk7z0X874V5SWHZi5qBVDpNLQTN3Df+PQOU7i0v5NoHCuJG+QLQ2RKN0gE2Il3gkT7F7tj4jNrpwAqkaoUr8vtpH0yIbP1lA2xGVILSrktry/3gDpQNdPaDB5ANOyp6pcHqEima32FhxAVXgdIFRS3kHpL67PWsUT18wzA32bC8Bo3nn5K6YwIDAQAB",
+  "description": "Udemy のクイズと動画字幕を Chrome 内蔵の Translator API で PC 内で日本語に翻訳します。アイコンをクリックすると開発者用語辞書エディターがサイドパネルに開きます。",
   "minimum_chrome_version": "138",
   "permissions": [
     "sidePanel",
@@ -22,7 +22,7 @@
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "단어장 열기",
+    "default_title": "単語帳を開く",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"

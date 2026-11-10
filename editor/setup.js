@@ -3,7 +3,7 @@
 // One-time registration guide, opened in a tab by the dictionary editor.
 // It shows the register command and waits until the helper answers.
 const SCRIPT_URL =
-  "https://raw.githubusercontent.com/JaceDashS/udemy-korean-translator/main/tools/register.ps1";
+  "https://raw.githubusercontent.com/songyu0608/udemy-japanese-translator/main/tools/register.ps1";
 const COMMAND = `irm ${SCRIPT_URL} | iex`;
 const POLL_MS = 2000;
 
@@ -14,10 +14,10 @@ document.getElementById("source").href = SCRIPT_URL;
 document.getElementById("copy").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(COMMAND);
-    state.textContent = "명령을 복사했습니다. PowerShell에 붙여넣고 Enter를 누르세요. 등록을 기다리는 중...";
+    state.textContent = "コマンドをコピーしました。PowerShell に貼り付けて Enter を押してください。登録を待っています...";
     state.className = "state";
   } catch (_) {
-    state.textContent = "복사하지 못했습니다. 위 명령을 직접 선택해 복사하세요.";
+    state.textContent = "コピーできませんでした。上のコマンドを選択して手動でコピーしてください。";
     state.className = "state error";
   }
 });
@@ -54,7 +54,7 @@ async function waitForRegistration() {
   while (!(await registered(needed))) {
     await new Promise(resolve => setTimeout(resolve, POLL_MS));
   }
-  state.textContent = "등록됐습니다. 이 탭을 닫고 사전 편집기로 돌아가세요. 편집기가 다음 단계로 이어서 진행합니다.";
+  state.textContent = "登録されました。このタブを閉じて辞書エディターに戻ってください。エディターが次の手順に進みます。";
   state.className = "state ok";
 }
 

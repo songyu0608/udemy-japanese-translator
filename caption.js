@@ -1,16 +1,16 @@
 /*
- * Korean Translator for Udemy: live caption translation.
- * Chrome 138+ / English -> Korean, on-device Translator API.
- * Shows Korean captions over the video and hides the English ones only while
- * the Korean text is ready. The translator, the dictionary, and the cache are
+ * Japanese Translator for Udemy: live caption translation.
+ * Chrome 138+ / English -> Japanese, on-device Translator API.
+ * Shows Japanese captions over the video and hides the English ones only while
+ * the Japanese text is ready. The translator, the dictionary, and the cache are
  * shared with the quiz (translator.js).
  */
 (() => {
   "use strict";
 
-  const KEY = "__udemyKoreanCaptionTranslator";
-  const LOG = "[Korean Translator]";
-  const core = window.__udemyKoreanTranslator;
+  const KEY = "__udemyJapaneseCaptionTranslator";
+  const LOG = "[Japanese Translator]";
+  const core = window.__udemyJapaneseTranslator;
 
   if (window[KEY]) return;
   window[KEY] = true;
@@ -24,7 +24,7 @@
     '[data-purpose="captions-cue-text"]';
 
   const HIDE_CLASS =
-    "udemy-ko-caption-hide-source";
+    "udemy-ja-caption-hide-source";
 
   // Finished translations, so a repeated caption shows at once. The shared
   // core caches the promises; this map holds the resolved text.
@@ -48,7 +48,7 @@
       visibility: hidden !important;
     }
 
-    #udemy-ko-caption-toggle {
+    #udemy-ja-caption-toggle {
       position: fixed !important;
       z-index: 2147483647 !important;
       display: none;
@@ -58,12 +58,12 @@
       border-radius: 7px;
       background: #6855df;
       color: white;
-      font: 600 12px Arial, sans-serif;
+      font: 600 12px Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
       cursor: pointer;
       box-shadow: 0 3px 12px #0008;
     }
 
-    #udemy-ko-caption-overlay {
+    #udemy-ja-caption-overlay {
       position: fixed !important;
       z-index: 2147483646 !important;
       display: none;
@@ -75,7 +75,9 @@
       text-align: center;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
-      font: 700 21px/1.45 Arial, sans-serif;
+      font: 700 21px/1.45 "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
+      line-break: strict;
+      word-break: normal;
       text-shadow: 0 1px 3px black;
       transform: translateY(-100%);
     }
@@ -89,13 +91,13 @@
 
   const button = document.createElement("button");
 
-  button.id = "udemy-ko-caption-toggle";
+  button.id = "udemy-ja-caption-toggle";
   button.type = "button";
-  button.textContent = "한국어 CC 시작";
+  button.textContent = "日本語字幕 開始";
 
   const overlay = document.createElement("div");
 
-  overlay.id = "udemy-ko-caption-overlay";
+  overlay.id = "udemy-ja-caption-overlay";
   overlay.setAttribute("aria-live", "off");
 
   document.body.append(button, overlay);
@@ -163,29 +165,29 @@
     );
   }
 
-  function clearKorean() {
+  function clearJapanese() {
     hideEnglish(false);
 
     overlay.textContent = "";
     overlay.style.display = "none";
   }
 
-  function setKorean(source, korean) {
+  function setJapanese(source, japanese) {
     if (
       !active ||
       removed ||
       source !== desired
     ) return;
 
-    if (!korean) {
-      clearKorean();
+    if (!japanese) {
+      clearJapanese();
       return;
     }
 
-    overlay.textContent = korean;
+    overlay.textContent = japanese;
     overlay.style.display = "block";
 
-    // Hide English only after Korean is ready.
+    // Hide English only after Japanese is ready.
     hideEnglish(true);
     positionUI();
   }
@@ -216,12 +218,12 @@
       ) {
         inFlight = desired;
 
-        const korean =
+        const japanese =
           await core.translate(inFlight);
 
         if (!active || removed) break;
 
-        cache.set(inFlight, korean);
+        cache.set(inFlight, japanese);
 
         // Limit in-memory cache size.
         if (cache.size > 250) {
@@ -232,7 +234,7 @@
 
         // Ignore outdated translations.
         if (desired === inFlight) {
-          setKorean(inFlight, korean);
+          setJapanese(inFlight, japanese);
         }
       }
 
@@ -241,7 +243,7 @@
         desired &&
         cache.has(desired)
       ) {
-        setKorean(
+        setJapanese(
           desired,
           cache.get(desired)
         );
@@ -254,7 +256,7 @@
       }
 
       if (active && desired === inFlight) {
-        clearKorean();
+        clearJapanese();
       }
     } finally {
       translating = false;
@@ -286,12 +288,12 @@
     desired = next;
 
     // Keep English visible until translation finishes.
-    clearKorean();
+    clearJapanese();
 
     if (!next) return;
 
     if (cache.has(next)) {
-      setKorean(next, cache.get(next));
+      setJapanese(next, cache.get(next));
     } else if (!failed.has(next)) {
       void drain();
     }
@@ -309,7 +311,7 @@
     if (!video) {
       button.style.display = "none";
       desired = "";
-      clearKorean();
+      clearJapanese();
       return;
     }
 
@@ -429,15 +431,15 @@
     button.disabled = true;
 
     button.textContent =
-      "번역 모델 준비 중…";
+      "翻訳モデルを準備中…";
 
     try {
       // Called from the button click, which a model download needs.
       const ready = await core.start(percent => {
-        button.textContent = `다운로드 ${percent}%`;
+        button.textContent = `ダウンロード ${percent}%`;
       });
       if (!ready) {
-        throw new Error("Chrome Translator API를 사용할 수 없습니다.");
+        throw new Error("Chrome Translator API を利用できません。");
       }
 
       if (removed) return;
@@ -446,7 +448,7 @@
       desired = "";
 
       button.textContent =
-        "한국어 CC 끄기 ×";
+        "日本語字幕 オフ ×";
 
       console.info(LOG, "Caption translation started.");
 
@@ -455,7 +457,7 @@
       console.error(LOG, "Caption translation could not start.", error);
 
       button.textContent =
-        "시작 실패 · 재시도";
+        "開始失敗・再試行";
     } finally {
       preparing = false;
       button.disabled = false;
@@ -471,17 +473,17 @@
     desired = "";
 
     failed.clear();
-    clearKorean();
+    clearJapanese();
 
     button.textContent =
-      "한국어 CC 시작";
+      "日本語字幕 開始";
 
     console.info(LOG, "Caption translation stopped; English captions restored.");
   }
 
-  // Korean captions start by themselves. Turning them off with the button is
+  // Japanese captions start by themselves. Turning them off with the button is
   // remembered on this browser until the user turns them on again.
-  const OFF_KEY = "udemyKoreanCaptionOff";
+  const OFF_KEY = "udemyJapaneseCaptionOff";
 
   function remembersOff() {
     try {
@@ -577,11 +579,11 @@
     overlay.remove();
 
     delete window[KEY];
-    delete window.udemyKoreanCaption;
+    delete window.udemyJapaneseCaption;
   }
 
   // Developer helpers
-  window.udemyKoreanCaption = {
+  window.udemyJapaneseCaption = {
     start,
     stop,
     destroy

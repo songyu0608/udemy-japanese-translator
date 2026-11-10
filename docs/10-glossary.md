@@ -6,7 +6,7 @@
 - Avoid: "test", "exam" when referring to a single question
 
 ## Caption
-- Definition: The English subtitle text Udemy shows over a lecture video, and the Korean overlay that replaces it
+- Definition: The English subtitle text Udemy shows over a lecture video, and the Japanese overlay that replaces it
 - Code: `caption.js`, `CAPTION_SELECTOR` (`[data-purpose="captions-cue-text"]`)
 - Avoid: "subtitle track" (the extension reads the visible cue, not the track)
 
@@ -16,8 +16,8 @@
 - Avoid: "option element"
 
 ## Translator
-- Definition: The Chrome built-in on-device Translator API instance (English to Korean)
-- Code: `translator.js` → `start()`, `translate()`; `window.__udemyKoreanTranslator`
+- Definition: The Chrome built-in on-device Translator API instance (English to Japanese)
+- Code: `translator.js` → `start()`, `translate()`; `window.__udemyJapaneseTranslator`
 - Note: One translator is shared by the quiz and the captions
 
 ## Dictionary
@@ -26,12 +26,12 @@
 - Avoid: "glossary" for this feature (the glossary is this document)
 
 ## Term
-- Definition: One row of the dictionary: an English word, an optional Korean meaning, and an optional case-sensitive flag
+- Definition: One row of the dictionary: an English word, an optional Japanese meaning, and an optional case-sensitive flag
 - Code: `configure()`, `normalizeRows()` in `dictionary.js`; `terms` in `dictionary.json`
 - Avoid: "pair", "entry" (use "term")
 
 ## Meaning
-- Definition: The Korean text that replaces a term in the translation. A term without a meaning stays in English
+- Definition: The Japanese text that replaces a term in the translation. A term without a meaning stays in English
 - Code: `meaningFor()`, `restore()` in `dictionary.js`
 - Avoid: "translation" for this text
 
@@ -47,11 +47,11 @@
 
 ## Helper
 - Definition: The PowerShell program on the user's PC that Chrome starts for the editor. It installs GitHub CLI and opens the login window on request, and commits or opens pull requests with the user's gh login
-- Code: `tools/dictionary-host.ps1`, native host name `com.udemy.dictionary_helper`, `background.js`
+- Code: `tools/dictionary-host.ps1`, native host name `com.udemy.ja_dictionary_helper`, `background.js`
 - Avoid: "server", "agent"
 
 ## Register Chain
-- Definition: The steps one click on 등록 / 등록 신청 runs in order: helper registered, GitHub CLI installed, logged in, submit. It pauses only for the user's approval
+- Definition: The steps one click on 登録 / 登録申請 runs in order: helper registered, GitHub CLI installed, logged in, submit. It pauses only for the user's approval
 - Code: `startChain()` in `editor/app.js`
 
 ## Placeholder
@@ -68,6 +68,6 @@
 - Code: `shiftForSide()`, `centeredColumn()`, `restoreShift()`
 
 ## Inline Translation
-- Definition: Korean text inserted into the Udemy page directly under the original question or answer
+- Definition: Japanese text inserted into the Udemy page directly under the original question or answer
 - Code: `showInlineTranslations()`, `data-udemy-quiz-inline`
 - Avoid: "panel" (the panel UI was removed)

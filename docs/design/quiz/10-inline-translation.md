@@ -40,7 +40,7 @@ Scenario:
 - Result: Original at 450px, translation right after it, both centered; no inline style left after `destroy()`
 
 ## Layout Diagnosis
-`window.udemyKoreanQuiz.layoutInfo()` returns the mode, the shifted element, the scroll container, and each ancestor of the first card with width, gaps, display, justify-content, margins, and overflow. Use it when the side placement looks wrong on a real Udemy page.
+`window.udemyJapaneseQuiz.layoutInfo()` returns the mode, the shifted element, the scroll container, and each ancestor of the first card with width, gaps, display, justify-content, margins, and overflow. Use it when the side placement looks wrong on a real Udemy page.
 
 ## Side Layout
 - Code: `showSideTranslations()`, `positionSide()`, `relayout()`, `requestRelayout()`
@@ -80,7 +80,7 @@ Scenario:
 - Result: Translations stay visible, no extra translation call
 
 ## Answer Scope Without a Footer
-- Input: A practice test page with a "질문 N:" or "Question N:" heading but no "Question N of M" footer
+- Input: A practice test page with a "Question N:", "질문 N:" or "質問 N:" heading but no "Question N of M" footer
 - Output: Only the answer controls inside the `data-testid="mc-quiz-question"` form
 - Code: `content.js` → `extractQuiz()`
 - Steps: When the form contains the heading or comes after it, answer controls outside the form are ignored. Without this, the course content list below the quiz adds its completion checkboxes, the count passes 12, and the page is skipped.

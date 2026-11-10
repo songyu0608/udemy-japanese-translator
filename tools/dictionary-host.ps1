@@ -21,7 +21,7 @@ $ErrorActionPreference = "Stop"
 # from the copy bundled in the extension and asks to update an older host.
 $HostVersion = 2
 
-$Repo ="JaceDashS/udemy-korean-translator"
+$Repo ="songyu0608/udemy-japanese-translator"
 $Branch = "dictionary"
 $File = "dictionary.json"
 $MaxWordLength = 200
@@ -180,20 +180,20 @@ function Start-Login {
   if (-not $gh) { throw [HelperError]::new("GitHub CLI is not installed.") }
 
   $script = @"
-`$host.UI.RawUI.WindowTitle = 'GitHub 로그인'
-Write-Host 'GitHub 로그인' -ForegroundColor Cyan
-Write-Host '1. 아래에 나오는 일회용 코드(XXXX-XXXX)를 확인하세요.'
-Write-Host '2. 질문이 나오면 Enter를 누르세요.'
-Write-Host '3. 열린 Chrome 탭(github.com/login/device)에 코드를 입력하고 승인하세요.'
+`$host.UI.RawUI.WindowTitle = 'GitHub ログイン'
+Write-Host 'GitHub ログイン' -ForegroundColor Cyan
+Write-Host '1. 下に表示されるワンタイムコード (XXXX-XXXX) を確認してください。'
+Write-Host '2. 質問が表示されたら Enter を押してください。'
+Write-Host '3. 開いた Chrome タブ (github.com/login/device) にコードを入力して承認してください。'
 Write-Host ''
 `$env:GH_BROWSER = 'cmd /c rem'
 & '$($gh -replace "'", "''")' auth login --web --hostname github.com --git-protocol https
 if (`$LASTEXITCODE -eq 0) {
   Write-Host ''
-  Write-Host '로그인했습니다. 이 창은 닫아도 됩니다. 사전 편집기가 이어서 진행합니다.' -ForegroundColor Green
+  Write-Host 'ログインしました。この画面は閉じてかまいません。辞書エディターが続きを進めます。' -ForegroundColor Green
 } else {
   Write-Host ''
-  Write-Host '로그인하지 못했습니다. 사전 편집기에서 GitHub 로그인 버튼을 다시 누르세요.' -ForegroundColor Yellow
+  Write-Host 'ログインできませんでした。辞書エディターで「GitHub にログイン」ボタンをもう一度押してください。' -ForegroundColor Yellow
 }
 "@
   $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($script))
@@ -307,7 +307,7 @@ function Update-Host($request) {
   $version = [int]$Matches[1]
   $target = $PSCommandPath
   $temp = "$target.new"
-  # Windows PowerShell 5.1 needs the BOM to read the Korean text as UTF-8.
+  # Windows PowerShell 5.1 needs the BOM to read the Japanese text as UTF-8.
   [IO.File]::WriteAllText($temp, $content, (New-Object System.Text.UTF8Encoding $true))
   Move-Item -Path $temp -Destination $target -Force
   Write-Log "updated from version $HostVersion to $version"

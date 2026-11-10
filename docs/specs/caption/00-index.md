@@ -1,3 +1,3 @@
 # Caption Specs Index
 
-- [Live Caption](10-live-caption.md) — Korean captions over Udemy lecture videos
+- [Live Caption](10-live-caption.md) — Japanese captions over Udemy lecture videos

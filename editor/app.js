@@ -1,6 +1,6 @@
     "use strict";
 
-    const REPO = "JaceDashS/udemy-korean-translator";
+    const REPO = "songyu0608/udemy-japanese-translator";
     const BRANCH = "dictionary";
     const RAW_URL = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/dictionary.json`;
     // Registering works only in the extension's side panel, where background.js
@@ -93,11 +93,11 @@
     // Returns a message when the rows cannot be submitted yet.
     function problems() {
       const empty = rows.filter(r => !r.word.trim()).length;
-      if (empty) return `단어가 비어 있는 행이 ${empty}개 있습니다. 채우거나 삭제하세요.`;
+      if (empty) return `単語が空の行が ${empty} 件あります。入力するか削除してください。`;
 
       const counts = wordCounts();
       const dups = [...counts].filter(([, n]) => n > 1).map(([word]) => word);
-      if (dups.length) return `같은 단어가 여러 행에 있습니다: ${dups.slice(0, 5).join(", ")}`;
+      if (dups.length) return `同じ単語が複数の行にあります: ${dups.slice(0, 5).join(", ")}`;
       return null;
     }
 
@@ -106,7 +106,7 @@
       ui.status.className = `status ${kind}`;
     }
 
-    function sayWithLink(message, url, label = " 열기") {
+    function sayWithLink(message, url, label = " 開く") {
       say(message, "ok");
       const link = document.createElement("a");
       link.href = url;
@@ -163,7 +163,7 @@
       const box = document.createElement("input");
       box.type = "checkbox";
       box.checked = r.exact;
-      box.setAttribute("aria-label", "대소문자 구분");
+      box.setAttribute("aria-label", "大文字と小文字を区別");
       box.addEventListener("change", () => {
         r.exact = box.checked;
         updateSummary();
@@ -176,7 +176,7 @@
       remove.type = "button";
       remove.className = "remove";
       remove.textContent = "×";
-      remove.setAttribute("aria-label", "행 삭제");
+      remove.setAttribute("aria-label", "行を削除");
       remove.addEventListener("click", () => {
         rows = rows.filter(x => x !== r);
         render();
@@ -214,14 +214,14 @@
     }
 
     function updatePager() {
-      ui.pageInfo.textContent = `${page} / ${pages} 페이지`;
+      ui.pageInfo.textContent = `${page} / ${pages} ページ`;
       ui.firstPage.disabled = ui.prevPage.disabled = page <= 1;
       ui.nextPage.disabled = ui.lastPage.disabled = page >= pages;
     }
 
     // ---- Helper ------------------------------------------------------------
     // background.js holds the native messaging port, so the helper keeps
-    // running after the panel closes, until 도우미 끄기 or the extension stops.
+    // running after the panel closes, until ヘルパーを停止 or the extension stops.
     function askHelper(request, timeoutMs = 30000) {
       return chrome.runtime
         .sendMessage({ target: "helper", action: "request", request, timeoutMs })
@@ -260,15 +260,15 @@
 
     function updateHelper() {
       if (!IS_EXTENSION) {
-        ui.helper.textContent = "읽기 전용: 등록과 등록 신청은 Chrome 확장의 사이드 패널에서 할 수 있습니다.";
+        ui.helper.textContent = "読み取り専用: 登録と登録申請は Chrome 拡張機能のサイドパネルで行えます。";
         ui.helper.className = "helper off";
         ui.helperStop.hidden = true;
         return;
       }
       const who = helper
-        ? ` · ${helper.login} · ${helper.canPush ? "소유자: 바로 등록" : "PR로 제안"}`
+        ? ` · ${helper.login} · ${helper.canPush ? "オーナー: 直接登録" : "PR で提案"}`
         : "";
-      ui.helper.textContent = helperRunning ? `도우미 실행 중${who}` : `도우미 꺼짐${who}`;
+      ui.helper.textContent = helperRunning ? `ヘルパー実行中${who}` : `ヘルパー停止中${who}`;
       ui.helper.className = helperRunning ? "helper ok" : "helper";
       ui.helperStop.hidden = !helperRunning;
     }
@@ -280,7 +280,7 @@
 
     function fail(message) {
       setStep("");
-      say(`실패: ${message}`, "error");
+      say(`失敗: ${message}`, "error");
     }
 
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -302,7 +302,7 @@
     async function startChain() {
       const id = ++chainId;
       setStep("busy");
-      say("도우미를 확인하는 중...");
+      say("ヘルパーを確認しています...");
 
       const ping = await askHelper({ type: "ping" }, 20000);
       if (id !== chainId) return;
@@ -324,8 +324,8 @@
       openSetupTab();
       setStep("register");
       say(replace
-        ? "설치된 도우미가 스스로 업데이트할 수 없는 버전입니다. 열린 탭의 안내대로 한 번 다시 등록해 주세요. 등록되면 자동으로 이어집니다."
-        : "이 PC에서 처음 한 번 등록이 필요합니다. 열린 탭의 안내를 따라 주세요. 등록되면 자동으로 이어집니다.");
+        ? "インストール済みのヘルパーは自動更新できないバージョンです。開いたタブの案内に従ってもう一度登録してください。登録されると自動で続行します。"
+        : "この PC では最初に一度だけ登録が必要です。開いたタブの案内に従ってください。登録されると自動で続行します。");
 
       const needed = (await bundledHost())?.version || 0;
       for (;;) {
@@ -365,7 +365,7 @@
       }
     }
 
-    // Stops the chain with 도우미 업데이트 when the installed helper is older.
+    // Stops the chain with ヘルパーを更新 when the installed helper is older.
     async function isCurrentHost(id, ping) {
       const bundled = await bundledHost();
       if (id !== chainId) return false;
@@ -377,19 +377,19 @@
       if (installed >= bundled.version) return true;
 
       setStep("update");
-      say(`도우미가 오래된 버전입니다(설치 v${installed}, 최신 v${bundled.version}). '도우미 업데이트'를 누르세요.`);
+      say(`ヘルパーが古いバージョンです（インストール済み v${installed}、最新 v${bundled.version}）。「ヘルパーを更新」を押してください。`);
       return false;
     }
 
     async function approveUpdate() {
       const id = chainId;
       setStep("busy");
-      say("도우미를 업데이트하는 중...");
+      say("ヘルパーを更新しています...");
       const bundled = await bundledHost();
       if (id !== chainId) return;
       if (!bundled) {
         setStep("update");
-        say("확장에 들어 있는 도우미 파일을 읽지 못했습니다. 확장을 다시 로드해 보세요.", "error");
+        say("拡張機能に含まれるヘルパーファイルを読み込めませんでした。拡張機能を再読み込みしてください。", "error");
         return;
       }
 
@@ -399,7 +399,7 @@
       if (isUnknownRequest(result)) return registerThenContinue(id, true);
       if (!result.ok) {
         setStep("update");
-        say(`업데이트하지 못했습니다: ${result.error}`, "error");
+        say(`更新できませんでした: ${result.error}`, "error");
         return;
       }
 
@@ -410,15 +410,15 @@
       if (id !== chainId) return;
       if (!ping.ok || (Number(ping.version) || 0) < bundled.version) {
         setStep("update");
-        say(`업데이트를 확인하지 못했습니다. 다시 눌러 주세요. (${ping.error || `v${ping.version}`})`, "error");
+        say(`更新を確認できませんでした。もう一度押してください。(${ping.error || `v${ping.version}`})`, "error");
         return;
       }
-      say(`도우미를 v${ping.version}으로 업데이트했습니다.`, "ok");
+      say(`ヘルパーを v${ping.version} に更新しました。`, "ok");
       await continueFromStatus(id);
     }
 
     async function continueFromStatus(id) {
-      say("GitHub CLI 상태를 확인하는 중...");
+      say("GitHub CLI の状態を確認しています...");
       const status = await askHelper({ type: "status" }, 60000);
       if (id !== chainId) return;
       if (!status.ok) return fail(status.error);
@@ -426,12 +426,12 @@
 
       if (!status.gh) {
         setStep("install");
-        say("GitHub CLI가 설치되어 있지 않습니다. 'GitHub CLI 설치'를 누르면 winget으로 설치합니다.");
+        say("GitHub CLI がインストールされていません。「GitHub CLI をインストール」を押すと winget でインストールします。");
         return;
       }
       if (!status.ghAuth) {
         setStep("login");
-        say("GitHub에 로그인되어 있지 않습니다. 'GitHub 로그인'을 누르세요.");
+        say("GitHub にログインしていません。「GitHub にログイン」を押してください。");
         return;
       }
       await submit(id);
@@ -440,12 +440,12 @@
     async function approveInstall() {
       const id = chainId;
       setStep("busy");
-      say("GitHub CLI를 설치하는 중... 1~2분 걸립니다. Windows 확인 창이 뜨면 허용하세요.");
+      say("GitHub CLI をインストールしています... 1〜2 分かかります。Windows の確認画面が出たら許可してください。");
       const result = await askHelper({ type: "install" }, 10 * 60000);
       if (id !== chainId) return;
       if (!result.ok) {
         setStep("install");
-        say(`설치하지 못했습니다: ${result.error}`, "error");
+        say(`インストールできませんでした: ${result.error}`, "error");
         return;
       }
       await continueFromStatus(id);
@@ -458,12 +458,12 @@
       if (id !== chainId) return;
       if (!result.ok) {
         setStep("login");
-        say(`로그인 창을 열지 못했습니다: ${result.error}`, "error");
+        say(`ログイン画面を開けませんでした: ${result.error}`, "error");
         return;
       }
       chrome.tabs.create({ url: LOGIN_URL });
       setStep("waitLogin");
-      say("PowerShell 창의 일회용 코드를 열린 GitHub 탭에 입력하고 승인하세요. 로그인되면 자동으로 이어집니다.");
+      say("PowerShell 画面のワンタイムコードを、開いた GitHub タブに入力して承認してください。ログインすると自動で続行します。");
 
       const deadline = Date.now() + 10 * 60000;
       while (Date.now() < deadline) {
@@ -479,7 +479,7 @@
         }
       }
       setStep("login");
-      say("로그인을 확인하지 못했습니다. 'GitHub 로그인'을 다시 누르세요.", "error");
+      say("ログインを確認できませんでした。「GitHub にログイン」をもう一度押してください。", "error");
     }
 
     function onRegisterClick() {
@@ -492,31 +492,31 @@
 
     function updateSummary() {
       const withMeaning = rows.filter(r => r.meaning.trim()).length;
-      ui.count.textContent = `전체 ${rows.length}행 · 검색 결과 ${matched}행 · 뜻 있음 ${withMeaning}개`;
+      ui.count.textContent = `全 ${rows.length} 行 · 検索結果 ${matched} 行 · 意味あり ${withMeaning} 件`;
 
       const problem = problems();
-      ui.problems.textContent = problem ? "⚠ 등록 불가" : "";
+      ui.problems.textContent = problem ? "⚠ 登録不可" : "";
       ui.problems.title = problem || "";
 
       const { added, changed, removed } = changes();
       const dirty = added.length + changed.length + removed.length > 0;
       ui.changes.textContent = dirty
-        ? `추가 ${added.length} · 수정 ${changed.length} · 삭제 ${removed.length}`
-        : "변경 없음";
+        ? `追加 ${added.length} · 変更 ${changed.length} · 削除 ${removed.length}`
+        : "変更なし";
 
       // Owners commit directly; everyone else opens a pull request. While the
       // chain waits for approval, the button shows that step instead.
       const labels = {
-        busy: "진행 중...",
-        register: "등록 안내 다시 열기",
-        update: "도우미 업데이트",
-        install: "GitHub CLI 설치",
-        login: "GitHub 로그인",
-        waitLogin: "로그인 기다리는 중..."
+        busy: "処理中...",
+        register: "登録案内をもう一度開く",
+        update: "ヘルパーを更新",
+        install: "GitHub CLI をインストール",
+        login: "GitHub にログイン",
+        waitLogin: "ログイン待ち..."
       };
-      // Until the helper has reported the permission once, the label is 등록;
+      // Until the helper has reported the permission once, the label is 登録;
       // the helper decides between a commit and a request either way.
-      ui.register.textContent = labels[step] || (helper && !helper.canPush ? "등록 신청" : "등록");
+      ui.register.textContent = labels[step] || (helper && !helper.canPush ? "登録申請" : "登録");
       ui.register.disabled = !IS_EXTENSION ||
         step === "busy" || step === "waitLogin" ||
         (!step && (!dirty || Boolean(problem)));
@@ -581,7 +581,7 @@
       query = "";
       ui.search.value = "";
       render();
-      say(`${parsed.length}행을 붙여넣었습니다.`);
+      say(`${parsed.length} 行を貼り付けました。`);
     }
 
     // Adds a term from the top form. Only the word is required; the new row
@@ -590,16 +590,16 @@
       const word = ui.newWord.value.trim();
       const meaning = ui.newMeaning.value.trim();
       if (!word) {
-        say("단어를 입력하세요. 뜻은 비워도 됩니다.", "error");
+        say("単語を入力してください。意味は空欄でもかまいません。", "error");
         ui.newWord.focus();
         return;
       }
       if (word.length > 200 || meaning.length > 200) {
-        say("단어와 뜻은 각각 200자 이하여야 합니다.", "error");
+        say("単語と意味はそれぞれ 200 文字以内にしてください。", "error");
         return;
       }
       if (rows.some(r => r.word.trim() === word)) {
-        say(`이미 있는 단어입니다: ${word}`, "error");
+        say(`すでにある単語です: ${word}`, "error");
         ui.newWord.select();
         return;
       }
@@ -614,7 +614,7 @@
       sort = { key: null, dir: 1 };
       render();
       ui.grid.scrollTop = 0;
-      say(`추가했습니다: ${word}`, "ok");
+      say(`追加しました: ${word}`, "ok");
       ui.newWord.focus();
     }
 
@@ -633,14 +633,14 @@
 
     // Reads the current dictionary.json from the branch (public, no token needed).
     async function load() {
-      say("불러오는 중...");
+      say("読み込み中...");
       try {
         const response = await fetch(RAW_URL, { cache: "no-store" });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const data = await response.json();
         if (data.version !== 2 || !Array.isArray(data.terms)) {
-          throw new Error("dictionary.json이 버전 2 형식이 아닙니다.");
+          throw new Error("dictionary.json がバージョン 2 形式ではありません。");
         }
 
         rows = toRows(data.terms);
@@ -648,9 +648,9 @@
         snapshot = snapshotOf(rows);
         query = "";
         ui.search.value = "";
-        say(`${rows.length}행을 불러왔습니다.`, "ok");
+        say(`${rows.length} 行を読み込みました。`, "ok");
       } catch (error) {
-        say(`불러오기 실패: ${error.message}`, "error");
+        say(`読み込み失敗: ${error.message}`, "error");
       }
       render();
     }
@@ -678,7 +678,7 @@
       ].join("\n");
 
       setStep("busy");
-      say(helper?.canPush ? "등록 중..." : "등록 신청 중...");
+      say(helper?.canPush ? "登録中..." : "登録申請中...");
       try {
         const data = await askHelper({ type: "submit", message, content: buildFile() }, 180000);
         if (id !== chainId) return;
@@ -686,22 +686,22 @@
 
         if (data.mode === "direct") {
           snapshot = snapshotOf(rows);
-          say(data.changed ? `등록 완료 (커밋 ${data.commit}). 다음 번역 페이지부터 반영됩니다.` : "변경된 내용이 없습니다.", "ok");
+          say(data.changed ? `登録完了（コミット ${data.commit}）。次に開く翻訳ページから反映されます。` : "変更はありません。", "ok");
         } else if (data.changed) {
           snapshot = snapshotOf(rows);
-          sayWithLink("등록 신청 완료. 소유자가 확인하면 반영됩니다.", data.url, " 신청 내용 보기");
+          sayWithLink("登録申請完了。オーナーが確認すると反映されます。", data.url, " 申請内容を見る");
         } else {
-          say("변경된 내용이 없습니다.", "ok");
+          say("変更はありません。", "ok");
         }
       } catch (error) {
-        say(`실패: ${error.message}`, "error");
+        say(`失敗: ${error.message}`, "error");
       } finally {
         if (id === chainId) setStep("");
       }
     }
 
     ui.reload.addEventListener("click", () => {
-      if (isDirty() && !confirm("저장하지 않은 변경이 사라집니다. 계속할까요?")) return;
+      if (isDirty() && !confirm("保存していない変更は失われます。続行しますか？")) return;
       load();
     });
     ui.helperStop.addEventListener("click", async () => {
@@ -709,12 +709,12 @@
       setStep("");
       await chrome.runtime.sendMessage({ target: "helper", action: "stop" });
       await refreshRunning();
-      say("도우미를 껐습니다. 등록 버튼을 누르면 다시 켜집니다.", "ok");
+      say("ヘルパーを停止しました。登録ボタンを押すと再び起動します。", "ok");
     });
     ui.cancel.addEventListener("click", () => {
       chainId++;
       setStep("");
-      say("취소했습니다.");
+      say("キャンセルしました。");
     });
     ui.search.addEventListener("input", () => {
       query = ui.search.value;

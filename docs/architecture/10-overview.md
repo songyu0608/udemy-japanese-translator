@@ -10,13 +10,13 @@
 - `background.js` — Service worker. Opens the side panel on the toolbar icon and holds the native messaging port to the helper.
 - `tools/dictionary-host.ps1` — Helper on the user's PC (native messaging host). Installs GitHub CLI and opens the login window on request; commits or opens pull requests through `gh api`.
 - `tools/register.ps1` — One-time registration of the helper with Chrome.
-- `translator.js` — Shared core. One Chrome Translator (en → ko), dictionary loading from the `dictionary` branch, and one translation cache. Sets `window.__udemyKoreanTranslator` (`isReady`, `start`, `onReady`, `translate`).
+- `translator.js` — Shared core. One Chrome Translator (en → ja), dictionary loading from the `dictionary` branch, and one translation cache. Sets `window.__udemyJapaneseTranslator` (`isReady`, `start`, `onReady`, `translate`).
 - `content.js` — Quiz and exam result translation: detects the quiz and renders the translations next to it.
-- `caption.js` — Live caption translation: Korean overlay over lecture videos.
+- `caption.js` — Live caption translation: Japanese overlay over lecture videos.
 
 ## Translation Flow
 A `MutationObserver` watches the Udemy page. On change, `update()` extracts the
-current quiz, translates the question and each answer, and inserts the Korean text
+current quiz, translates the question and each answer, and inserts the Japanese text
 next to the original elements: to the right when there is room, otherwise below. There is no panel or button on the page.
 
 ```mermaid
@@ -30,7 +30,7 @@ flowchart LR
 Scenario:
 - Input: User moves from Question 3 to Question 4
 - Steps: Observer fires → `extractQuiz()` returns question 4 → translated → old inline nodes removed, new ones inserted
-- Result: Korean text for question 4 appears under the original question and each answer
+- Result: Japanese text for question 4 appears under the original question and each answer
 
 ## Dictionary Sync
 - Each page load fetches `dictionary.json` from the `dictionary` branch and falls back to the bundled list. See [Dictionary Sync](../design/translation/30-dictionary-sync.md)
@@ -45,7 +45,7 @@ flowchart LR
 ```
 
 ## Caption Flow
-A 150 ms timer reads the visible caption cues of the lecture video. A new cue is translated through the shared core and shown in an overlay; the English cue is hidden only while the Korean text is shown. See [Live Caption](../design/caption/10-live-caption.md)
+A 150 ms timer reads the visible caption cues of the lecture video. A new cue is translated through the shared core and shown in an overlay; the English cue is hidden only while the Japanese text is shown. See [Live Caption](../design/caption/10-live-caption.md)
 
 ```mermaid
 flowchart LR

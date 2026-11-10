@@ -1,13 +1,13 @@
 
 /*
- * Korean Translator for Udemy: quiz and exam translation.
- * Chrome 138+ / English -> Korean, on-device Translator API.
+ * Japanese Translator for Udemy: quiz and exam translation.
+ * Chrome 138+ / English -> Japanese, on-device Translator API.
  * The translator, the dictionary, and the cache live in translator.js.
  */
 (() => {
   "use strict";
 
-  const INSTANCE = "__udemyLocalQuizTranslatorV1";
+  const INSTANCE = "__udemyLocalQuizTranslatorJaV1";
   if (window[INSTANCE]) return;
   window[INSTANCE] = true;
 
@@ -15,8 +15,8 @@
     window.stopQuizTranslation?.();
   } catch (_) {}
 
-  const LOG = "[Korean Translator]";
-  const core = window.__udemyKoreanTranslator;
+  const LOG = "[Japanese Translator]";
+  const core = window.__udemyJapaneseTranslator;
   const translateCached = core.translate;
 
   let seq = 0;
@@ -112,7 +112,7 @@
     if (explanation) {
       const detail = document.createElement("span");
       detail.className = "uqt-explanation";
-      detail.textContent = `해설\n${explanation}`;
+      detail.textContent = `解説\n${explanation}`;
       box.append(detail);
     }
 
@@ -289,7 +289,7 @@
     return true;
   }
 
-  function showSideTranslations(quiz, questionKo, answersKo, scroller) {
+  function showSideTranslations(quiz, questionJa, answersJa, scroller) {
     const cards = quiz.nodes.cards;
     const reference = getComputedStyle(cards[0]);
 
@@ -302,13 +302,13 @@
 
     const items = [{
       anchor: quiz.nodes.header?.isConnected ? quiz.nodes.header : cards[0],
-      box: makeInlineTranslation(questionKo, "question")
+      box: makeInlineTranslation(questionJa, "question")
     }];
 
     cards.forEach((card, i) => {
       items.push({
         anchor: card,
-        box: makeInlineTranslation(answersKo[i].ko, "answer", answersKo[i].explanationKo)
+        box: makeInlineTranslation(answersJa[i].ja, "answer", answersJa[i].explanationJa)
       });
     });
 
@@ -387,11 +387,11 @@
       return;
     }
 
-    const { quiz, questionKo, answersKo } = lastRendered;
+    const { quiz, questionJa, answersJa } = lastRendered;
     if (quiz.nodes.cards.some(card => !card.isConnected)) return;
 
     if (!full && positionSide()) return;
-    showInlineTranslations(quiz, questionKo, answersKo);
+    showInlineTranslations(quiz, questionJa, answersJa);
   }
 
   function requestRelayout() {
@@ -452,7 +452,7 @@
     for (const target of targets) widthObserver.observe(target);
   }
 
-  function showInlineTranslations(quiz, questionKo, answersKo) {
+  function showInlineTranslations(quiz, questionJa, answersJa) {
     clearInlineTranslations();
     const cards = quiz.nodes.cards;
     if (!cards.length || cards.some(card => !card.isConnected)) return;
@@ -461,25 +461,25 @@
     watchWidths(cards[0]);
     shiftForSide(quiz, scroller);
     if (sideColumn(cards, scroller)) {
-      showSideTranslations(quiz, questionKo, answersKo, scroller);
+      showSideTranslations(quiz, questionJa, answersJa, scroller);
       return;
     }
     restoreShift();
 
     // The translated question goes between the original question and first answer.
     const questionBox = makeInlineTranslation(
-      questionKo, "question", "", cards[0]
+      questionJa, "question", "", cards[0]
     );
     cards[0].before(questionBox);
     inlineNodes.push(questionBox);
 
     // Each translated choice follows its original choice without changing the input.
     cards.forEach((card, i) => {
-      const translated = answersKo[i];
+      const translated = answersJa[i];
       const answerBox = makeInlineTranslation(
-        translated.ko,
+        translated.ja,
         "answer",
-        translated.explanationKo,
+        translated.explanationJa,
         card
       );
       card.after(answerBox);
@@ -674,20 +674,20 @@
 
   function extractQuiz() {
     const headerNode = findText(
-      /^(?:Question|질문)\s*(\d+)\s*:/i
+      /^(?:Question|질문|質問)\s*(\d+)\s*[:：]/i
     );
 
     if (!headerNode) return extractFormQuiz();
 
     const number = headerNode.nodeValue.match(
-      /(?:Question|질문)\s*(\d+)\s*:/i
+      /(?:Question|질문|質問)\s*(\d+)\s*[:：]/i
     )?.[1];
 
     if (!number) return null;
 
     const footerNode = findText(
       new RegExp(
-        `^(?:Question\\s*${number}\\s*of\\s*\\d+|\\d+\\s*의\\s*질문\\s*${number})$`,
+        `^(?:Question\\s*${number}\\s*of\\s*\\d+|\\d+\\s*의\\s*질문\\s*${number}|質問\\s*${number}\\s*[/／]\\s*\\d+|\\d+\\s*問中\\s*${number}\\s*問目?)$`,
         "i"
       )
     );
@@ -748,7 +748,7 @@
       const all = document.body.innerText;
 
       const prefix = new RegExp(
-        `(?:Question|질문)\\s*${number}\\s*:\\s*`,
+        `(?:Question|질문|質問)\\s*${number}\\s*[:：]\\s*`,
         "i"
       );
 
@@ -772,7 +772,7 @@
     if (!question) return null;
 
     question = question.replace(
-      /^\s*(?:Question|질문)\s*\d+\s*:/i,
+      /^\s*(?:Question|질문|質問)\s*\d+\s*[:：]/i,
       ""
     ).trim();
 
@@ -992,7 +992,7 @@
       // Udemy can replace its answer elements with identical text.
       if (lastRendered?.key === key && !inlineIsCurrent(quiz)) {
         showInlineTranslations(
-          quiz, lastRendered.questionKo, lastRendered.answersKo
+          quiz, lastRendered.questionJa, lastRendered.answersJa
         );
         lastRendered.cards = [...quiz.nodes.cards];
         lastRendered.quiz = quiz;
@@ -1009,25 +1009,25 @@
     clearInlineTranslations();
 
     try {
-      const questionKo = await translateCached(quiz.question);
-      const answersKo = [];
+      const questionJa = await translateCached(quiz.question);
+      const answersJa = [];
 
       for (const a of quiz.answers) {
-        answersKo.push({
+        answersJa.push({
           ...a,
-          ko: await translateCached(a.source),
-          explanationKo: await translateCached(a.explanation)
+          ja: await translateCached(a.source),
+          explanationJa: await translateCached(a.explanation)
         });
       }
 
       if (mySeq !== seq) return;
 
-      showInlineTranslations(quiz, questionKo, answersKo);
+      showInlineTranslations(quiz, questionJa, answersJa);
       lastRendered = {
         key,
         quiz,
-        questionKo,
-        answersKo,
+        questionJa,
+        answersJa,
         cards: [...quiz.nodes.cards]
       };
     } catch (error) {
@@ -1137,7 +1137,7 @@
   });
 
   // Development helpers.
-  window.udemyKoreanQuiz = {
+  window.udemyJapaneseQuiz = {
     start: () => core.start(),
     layoutInfo,
     refresh: () => {
@@ -1162,7 +1162,7 @@
       stopWaitingForTranslator();
 
       delete window[INSTANCE];
-      delete window.udemyKoreanQuiz;
+      delete window.udemyJapaneseQuiz;
     }
   };
 

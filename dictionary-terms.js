@@ -14,7 +14,7 @@
   const root = typeof window !== "undefined" ? window : globalThis;
 
   root.__udemyQuizTranslatorTerms = {
-    // word → Korean meaning. The meaning replaces the word in translations.
+    // word → Japanese meaning. The meaning replaces the word in translations.
     pairs: {},
     caseSensitive: [
       // Claude product and model names

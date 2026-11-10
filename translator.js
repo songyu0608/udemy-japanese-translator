@@ -1,18 +1,18 @@
 /*
- * Korean Translator for Udemy: shared translation core.
+ * Japanese Translator for Udemy: shared translation core.
  * Used by the quiz (content.js) and the captions (caption.js).
- * - One on-device Chrome Translator (English -> Korean) for the whole page
+ * - One on-device Chrome Translator (English -> Japanese) for the whole page
  * - Dictionary terms from the dictionary branch (bundled list as fallback)
  * - One translation cache
  */
 (() => {
   "use strict";
 
-  const KEY = "__udemyKoreanTranslator";
+  const KEY = "__udemyJapaneseTranslator";
   if (window[KEY]) return;
 
-  const LOG = "[Korean Translator]";
-  const LANGS = { sourceLanguage: "en", targetLanguage: "ko" };
+  const LOG = "[Japanese Translator]";
+  const LANGS = { sourceLanguage: "en", targetLanguage: "ja" };
   const CACHE_LIMIT = 1000;
 
   let translator = null;
@@ -28,7 +28,7 @@
   // takes effect without reloading the extension. The bundled list in
   // dictionary-terms.js stays in use when the download fails.
   const GLOSSARY_URL =
-    "https://raw.githubusercontent.com/JaceDashS/udemy-korean-translator/dictionary/dictionary.json";
+    "https://raw.githubusercontent.com/songyu0608/udemy-japanese-translator/dictionary/dictionary.json";
   const GLOSSARY_TIMEOUT_MS = 3000;
   const GLOSSARY_LIMITS = { terms: 10000, length: 200 };
 
@@ -145,7 +145,7 @@
       } else if (availability === "downloadable" || availability === "downloading") {
         startOnFirstGesture();
       } else {
-        console.warn(LOG, `English to Korean translation is ${availability}.`);
+        console.warn(LOG, `English to Japanese translation is ${availability}.`);
       }
     } catch (error) {
       console.error(LOG, "Failed to check translator availability.", error);
@@ -154,7 +154,7 @@
 
   // ---- Translation -----------------------------------------------------------
 
-  // Kept terms stay in English; pairs are replaced with their Korean meaning.
+  // Kept terms stay in English; pairs are replaced with their Japanese meaning.
   // If the translator drops a placeholder, fall back to a plain translation
   // instead of showing a broken sentence.
   async function translateWithDictionary(source) {

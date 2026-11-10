@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(() => {
  *   { action: "stop" }                        -> disconnects the helper
  *   { action: "state" }                       -> { running }
  */
-const NATIVE_HOST = "com.udemy.dictionary_helper";
+const NATIVE_HOST = "com.udemy.ja_dictionary_helper";
 
 let port = null;
 let nextId = 1;

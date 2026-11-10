@@ -64,33 +64,33 @@
 - Test: "leaves text with existing placeholder syntax untouched"
 
 ### Lost Placeholder
-- Input: Translation "[[0]]만 남음" for terms `EC2`, `S3`
+- Input: Translation "[[0]]だけ残る" for terms `EC2`, `S3`
 - Steps: `restore()` returns `null` → `translateWithDictionary()` translates the plain source
 - Result: A plain translation is shown, never a broken one
 - Test: "restore returns null when a placeholder is lost"
 
 ### Extra Brackets From Translator
-- Input: "[[[0]]에서 [[1]]]" (observed on Chrome 157)
+- Input: "[[[0]]で[[1]]]" (observed on Chrome 157)
 - Steps: `restore()`
-- Result: "Auto Scaling group에서 EC2" with no stray brackets
+- Result: "Auto Scaling groupでEC2" with no stray brackets
 - Test: "restore absorbs extra brackets added by the translator"
 
 ### Spacing and Repeats
-- Input: "[[ 0 ]]와 [[0]]"
+- Input: "[[ 0 ]]と[[0]]"
 - Steps: `restore()`
-- Result: "S3와 S3"
+- Result: "S3とS3"
 - Test: "restore accepts spacing inside brackets and repeated placeholders"
 
 ### Meaning Replaces Word
-- Input: "Create a private subnet with lag." with rows `private subnet` → `프라이빗 서브넷`, `lag` → `지연`
+- Input: "Create a private subnet with lag." with rows `private subnet` → `プライベートサブネット`, `lag` → `遅延`
 - Steps: `configure(rows)` → `protect()` → translate "Create a [[0]] with [[1]]." → `restore()` with meanings
-- Result: Korean text contains `프라이빗 서브넷` and `지연`, not the English words
+- Result: Japanese text contains `プライベートサブネット` and `遅延`, not the English words
 - Test: "pairs are replaced with their meaning"
 
 ### Meaning For Plural
 - Input: "Two private subnets." with row `private subnet`
 - Steps: `protect()`
-- Result: Meaning `프라이빗 서브넷` is used for `private subnets`
+- Result: Meaning `プライベートサブネット` is used for `private subnets`
 - Test: "pair lookup accepts a plural of the listed word"
 
 ### Row Overrides Same Spelling
